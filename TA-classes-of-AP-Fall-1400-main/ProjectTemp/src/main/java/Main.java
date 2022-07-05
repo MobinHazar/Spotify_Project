@@ -11,7 +11,7 @@ import io.swagger.client.model.AuthLoginBody;
 import java.util.Scanner;
 
 public class Main {
-    public static final String MY_API_KEY = "ed93cf058a0f4c2db6a179e1fe3cac752cec6b26";
+    public static final String MY_API_KEY = "5f718eaba2e175cde156d51671bf000969d0bad1";
     public static ApiClient defaultClient;
     public static DefaultApi defaultApi;
     public static AuthApi authApi;

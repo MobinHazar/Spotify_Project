@@ -1,3 +1,5 @@
+import io.swagger.client.model.Track;
+
 public class Playlist {
     public String name;
     public Track[] tracks;
