@@ -18,7 +18,7 @@ public class Main {
     public static UsersApi usersApi;
     public static User currentUser;
     public static long start = 0;
-    public static String[] allTracks;
+    public static String allTracks;
     public static boolean isFirstCall = true;
 
     public static void authAPIKey() {
@@ -94,7 +94,7 @@ public class Main {
                     System.out.println(apiException.getResponseBody());
                 }
             } else {
-                System.out.println(tracks);
+                System.out.println(allTracks);
             }
         }
     }
