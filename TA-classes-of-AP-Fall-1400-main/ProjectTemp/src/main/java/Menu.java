@@ -68,9 +68,11 @@ public class Menu {
             try {
                 playlists = Main.usersApi.getPlaylistsInfo();
                 System.out.println(playlists);
+                start = System.currentTimeMillis() / 1000;
                 System.out.println("Enter 0 at any page to go back\n1- Create Playlist\n2- Add Track to Playlist\n3- Remove Track from Playlist\n4- Delete Playlist");
                 int choice2 = input.nextInt();
-                if (choice2 == 1) {
+                if (choice2 == 0){userMenuProcess();}
+                else if (choice2 == 1) {
                         PlaylistsBody playlistsBody = new PlaylistsBody();
                         System.out.println("Enter Playlist Name");
                         String name = input.next();
@@ -98,12 +100,13 @@ public class Menu {
                 } else if (choice2 == 4) {
                     System.out.println("Enter Playlist ID");
                     int playlistId = input.nextInt();
-                    System.out.println(Main.usersApi.deletePlaylist(playlistId));
+                    Main.usersApi.deletePlaylist(playlistId);
                     System.out.println("Playlist deleted successfully");
                     playlistProcess();
                 }
             } catch (ApiException apiException) {
                 System.out.println(apiException.getResponseBody());
+                playlistProcess();
             }
         } else {
             System.out.println(playlists);
