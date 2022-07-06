@@ -15,6 +15,7 @@ public class Menu {
     public static long start = 0;
     public static Tracks tracks;
     public static String allTracks = "";
+    public static String normalTracks = "";
     public static boolean isFirstCall = true;
 
     public static void userMenuProcess() {
@@ -25,30 +26,24 @@ public class Menu {
             Profile.profile();
         } else if (choice == 2) {
             long currentTime = System.currentTimeMillis() / 1000;
-            if (currentTime - start > 20 || isFirstCall) {
+
                 try {
-                    tracks = Main.usersApi.getTracksInfo();
-                    for (io.swagger.client.model.Track track : tracks) {
-                        if (!track.isIsPremium()) {
-                            allTracks += track.toString();
+                    if (currentTime - start > 20 || isFirstCall) {
+                        start = System.currentTimeMillis() / 1000;
+                        isFirstCall = false;
+                        tracks = Main.usersApi.getTracksInfo();
+                        for (io.swagger.client.model.Track track : tracks) {
+                            if (!track.isIsPremium()) {
+                                normalTracks += track.toString();
+                            }
                         }
                     }
-                    System.out.println(allTracks);
-                    start = System.currentTimeMillis() / 1000;
-                    isFirstCall = false;
-                    System.out.println("Enter 0 at any page to go back");
-                    int exit = input.nextInt();
-                    while (exit != 0) {
-                        exit = input.nextInt();
-                    }
+                    System.out.println(normalTracks);
                     userMenuProcess();
                 } catch (ApiException apiException) {
                     isFirstCall = false;
                     System.out.println(apiException.getResponseBody());
                 }
-            } else {
-                System.out.println(allTracks);
-            }
         } else if (choice == 3) {
             Playlist.playlistProcess();
         } else if (choice == 4) {
@@ -77,26 +72,19 @@ public class Menu {
             Profile.profile();
         } else if (choice == 2) {
             long currentTime = System.currentTimeMillis() / 1000;
-            if (currentTime - start > 20 || isFirstCall) {
                 try {
-                    allTracks = Main.usersApi.getTracksInfo().toString();
-                    System.out.println(allTracks);
-                    start = System.currentTimeMillis() / 1000;
-                    isFirstCall = false;
-                    System.out.println("Enter 0 at any page to go back");
-                    int exit = input.nextInt();
-                    while (exit != 0) {
-                        exit = input.nextInt();
+                    if (currentTime - start > 20 || isFirstCall) {
+                        allTracks = Main.usersApi.getTracksInfo().toString();
+                        start = System.currentTimeMillis() / 1000;
+                        isFirstCall = false;
                     }
+                    System.out.println(allTracks);
                     userMenuProcess();
                 } catch (ApiException apiException) {
-                    isFirstCall = false;
                     System.out.println(apiException.getResponseBody());
+                    userMenuProcess();
                 }
-            } else {
-                System.out.println(allTracks);
-            }
-        } else if (choice == 3) {
+            } else if (choice == 3) {
             Playlist.playlistProcess();
         } else if (choice == 4) {
             friendProcess();
@@ -110,70 +98,83 @@ public class Menu {
 
     public static void friendProcess() {
         Scanner input = new Scanner(System.in);
-        System.out.println("1-List of friends\n2-Friends requests\n3-Friends playlists");
+        System.out.println("1-List of friends\n2-Add friend\n3-Friends requests\n4-Friends playlists");
         int choice2 = input.nextInt();
         if (choice2 == 0) {
             premiumMenu();
         } else if (choice2 == 1) {
             long currentTime = System.currentTimeMillis() / 1000;
-            if (currentTime - start > 20 || isFirstCall) {
                 try {
-                    friends = premiumUsersApi.getFriends();
-                    System.out.println(friends);
-                    start = System.currentTimeMillis() / 1000;
-                } catch (ApiException apiException) {
-                    System.out.println(apiException.getResponseBody());
-                    premiumMenu();
-                }
-            } else {
-                System.out.println(friends);
-            }
-        } else if (choice2 == 2) {
-            long currentTime = System.currentTimeMillis() / 1000;
-            if (currentTime - start > 20 || isFirstCall) {
-                try {
-                    friendsRequests = premiumUsersApi.getFriendRequests();
-                    System.out.println(friendsRequests);
-                    start = System.currentTimeMillis() / 1000;
-                    System.out.println("Enter friend username that you want to accept");
-                    String userName = input.next();
-                    System.out.println(premiumUsersApi.addFriend(userName));
-                    System.out.println("Friend added");
-                    System.out.println("Enter 0 at any page to go back");
-                    int exit = input.nextInt();
-                    while (exit != 0) {
-                        exit = input.nextInt();
-                    }
-                    premiumMenu();
-                } catch (ApiException apiException) {
-                    System.out.println(apiException.getResponseBody());
-                    premiumMenu();
-                }
-            } else {
-                System.out.println(friendsRequests);
-            }
-        }
-                else if (choice2 == 3) {
-                long currentTime = System.currentTimeMillis() / 1000;
-                if (currentTime - start > 20 || isFirstCall) {
-                try {
-                        System.out.println("Enter friend username that you want to see playlists");
-                        String userName = input.next();
-                        friendPlaylists = premiumUsersApi.getFriendPlaylists(userName);
-                        System.out.println(friendPlaylists);
+                    if (currentTime - start > 20 || isFirstCall) {
+                        friends = premiumUsersApi.getFriends();
                         start = System.currentTimeMillis() / 1000;
-                        System.out.println("Enter 0 at any page to go back");
-                        int exit = input.nextInt();
-                        while (exit != 0) {
-                            exit = input.nextInt();
-                        }
+                        isFirstCall = false;
+                    }
+                    System.out.println(friends);
+                    friendProcess();
+                } catch (ApiException apiException) {
+                    System.out.println(apiException.getResponseBody());
+                    friendProcess();
+                }
+            }
+        else if (choice2 == 2) {
+            try {
+                System.out.println("Enter the username of the friend you want to add");
+                String friendUsername = input.next();
+                premiumUsersApi.addFriend(friendUsername);
+                System.out.println("You have added " + friendUsername + " as a friend");
+                friendProcess();
+            } catch (ApiException apiException) {
+            System.out.println(apiException.getResponseBody());
+            friendProcess();
+        }
+        }
+        else if (choice2 == 3) {
+            long currentTime = System.currentTimeMillis() / 1000;
+            try {
+                if (currentTime - start > 20 || isFirstCall) {
+                friendsRequests = premiumUsersApi.getFriendRequests();
+                isFirstCall = false;
+                start = System.currentTimeMillis() / 1000;
+                }
+                    System.out.println(friendsRequests);
+                    System.out.println("Press 1 if you want to accept friend request or 0 to go back");
+                    int income = input.nextInt();
+                    if (income == 1) {
+                        System.out.println("Enter friend username that you want to accept");
+                        String userName = input.next();
+                        premiumUsersApi.addFriend(userName);
+                        System.out.println("Friend added");
+                        friendProcess();
+                    } else if (income == 0) {
+                        friendProcess();
+                    } else {
+                        System.out.println("Invalid choice");
                         premiumMenu();
+                    }
+                } catch (ApiException apiException) {
+                    System.out.println(apiException.getResponseBody());
+                    friendProcess();
+                }
+        }
+                else if (choice2 == 4) {
+                long currentTime = System.currentTimeMillis() / 1000;
+                try {
+                        if (currentTime - start > 20 || isFirstCall) {
+                            System.out.println("Enter friend username that you want to see playlists");
+                            String userName = input.next();
+                            isFirstCall = false;
+                            start = System.currentTimeMillis() / 1000;
+                            friendPlaylists = premiumUsersApi.getFriendPlaylists(userName);
+                        }
+                        else System.out.println("Sorry, you have to wait for 20 seconds to see new playlists");
+                        System.out.println(friendPlaylists);
+                        friendProcess();
                     } catch(ApiException apiException){
                         System.out.println(apiException.getResponseBody());
-                        premiumMenu();
+                        friendProcess();
                     }
-                }
-            } else {
+                }else {
                 System.out.println("Invalid choice please try again");
                 premiumMenu();
             }

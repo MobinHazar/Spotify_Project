@@ -10,9 +10,10 @@ public class Playlist {
     public static void playlistProcess(){
         Scanner input = new Scanner(System.in);
         long currentTime = System.currentTimeMillis() / 1000;
-        if (currentTime - Menu.start > 20 || Menu.isFirstCall) {
             try {
-                playlists = Main.usersApi.getPlaylistsInfo();
+                if (currentTime - Menu.start > 20 || Menu.isFirstCall) {
+                    playlists = Main.usersApi.getPlaylistsInfo();
+                }
                 System.out.println(playlists);
                 Menu.start = System.currentTimeMillis() / 1000;
                 System.out.println("Enter 0 at any page to go back\n1- Create Playlist\n2- Add Track to Playlist\n3- Remove Track from Playlist\n4- Delete Playlist");
@@ -55,8 +56,5 @@ public class Playlist {
                 System.out.println(apiException.getResponseBody());
                 playlistProcess();
             }
-        } else {
-            System.out.println(playlists);
         }
     }
-}

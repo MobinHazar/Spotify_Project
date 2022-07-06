@@ -1,4 +1,5 @@
 import io.swagger.client.ApiException;
+import io.swagger.client.api.PremiumUsersApi;
 import io.swagger.client.auth.OAuth;
 import io.swagger.client.model.AuthLoginBody;
 
@@ -28,6 +29,7 @@ public class Login {
                 Menu.userMenuProcess();
             }
             else {
+                Menu.premiumUsersApi = new PremiumUsersApi(Main.defaultClient);
                 Menu.premiumMenu();
             }
             Main.currentUser = new User(username, password);
