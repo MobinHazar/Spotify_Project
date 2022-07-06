@@ -20,7 +20,7 @@ public class Singup {
             if (m.find()) {
                 flag = false;
             } else {
-                System.out.println("Password must contain at least one letter and one number");
+                System.out.println("Password must contain at least one lowercase letter, one uppercase letter, one digit and must be at least 8 characters long; please try again");
                 System.out.println("Enter password");
                 password = input.next();
             }

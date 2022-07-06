@@ -26,7 +26,6 @@ public class Menu {
             Profile.profile();
         } else if (choice == 2) {
             long currentTime = System.currentTimeMillis() / 1000;
-
                 try {
                     if (currentTime - start > 20 || isFirstCall) {
                         start = System.currentTimeMillis() / 1000;
