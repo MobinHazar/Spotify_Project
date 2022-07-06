@@ -29,12 +29,17 @@ public class Main {
 
     public static void main(String[] args) {
         authAPIKey();
+        welcome();
+    }
+    public static void welcome() {
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome\n1-Login\n2-Signup");
-
         int choice = input.nextInt();
         if (choice == 1) Login.loginProcess();
         else if (choice == 2) Singup.singupProcess();
-
+        else {
+            System.out.println("Invalid input please try again");
+            welcome();
+        }
     }
 }
