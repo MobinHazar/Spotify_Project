@@ -24,8 +24,12 @@ public class Login {
             Main.defaultClient.setAccessToken(Main.currentUser.token);
             OAuth bearerAuth = (OAuth) Main.defaultClient.getAuthentication("bearerAuth");
             bearerAuth.setAccessToken(Main.currentUser.token);
-
-            Menu.userMenuProcess();
+            if(Main.usersApi.getProfileInfo().toString().contains("premiumUntil: null")) {
+                Menu.userMenuProcess();
+            }
+            else {
+                Menu.premiumMenu();
+            }
             Main.currentUser = new User(username, password);
             Main.currentUser.token = token;
         } catch (ApiException apiException) {
